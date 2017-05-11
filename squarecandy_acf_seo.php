@@ -330,6 +330,19 @@ function squarecandy_acf_seo_hook_header() {
 	if ( function_exists('get_field') && get_field('seo_meta_description') ) {
 		$description = get_field('seo_meta_description');
 	}
+	// else if we can get an excerpt for the post
+	elseif ( get_the_excerpt() ) {
+		// https://wordpress.stackexchange.com/a/70924/41488
+		$limit = 160;
+		$excerpt = get_the_excerpt();
+		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
+		$excerpt = strip_shortcodes($excerpt);
+		$excerpt = strip_tags($excerpt);
+		$excerpt = substr($excerpt, 0, $limit);
+		$excerpt = substr($excerpt, 0, strripos($excerpt, " "));
+		$excerpt = trim(preg_replace( '/\s+/', ' ', $excerpt));
+		$description = $excerpt;
+	}
 	// else if default description field is not empty
 	elseif ( function_exists('get_field') && get_field('default_meta_description', 'options') ) {
 		$description = get_field('default_meta_description', 'options');
