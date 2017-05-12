@@ -332,9 +332,8 @@ function squarecandy_acf_seo_hook_header() {
 	}
 	// else if we can get an excerpt for the post
 	elseif ( is_single() ) {
-		// https://wordpress.stackexchange.com/a/132310/41488
-		$post_id = get_queried_object_id();
-		$excerpt = get_the_excerpt( $post_id );
+		setup_postdata( $post );
+		$excerpt = get_the_excerpt();
 		// https://wordpress.stackexchange.com/a/70924/41488
 		$limit = 160;
 		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
