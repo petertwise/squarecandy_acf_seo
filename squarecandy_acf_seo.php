@@ -331,15 +331,12 @@ function squarecandy_acf_seo_hook_header() {
 		$description = get_field('seo_meta_description');
 	}
 	// else if we can get an excerpt for the post
-	elseif ( get_the_excerpt() || get_the_content() ) {
+	elseif ( is_single() ) {
+		// https://wordpress.stackexchange.com/a/132310/41488
+		$post_id = get_queried_object_id():
+		$excerpt = get_the_excerpt( $post_id );
 		// https://wordpress.stackexchange.com/a/70924/41488
 		$limit = 160;
-		if ( get_the_excerpt() ) {
-			$excerpt = get_the_excerpt();
-		}
-		else {
-			$excerpt = get_the_content();
-		}
 		$excerpt = preg_replace(" (\[.*?\])",'',$excerpt);
 		$excerpt = strip_shortcodes($excerpt);
 		$excerpt = strip_tags($excerpt);
