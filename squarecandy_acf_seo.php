@@ -121,6 +121,25 @@ acf_add_local_field_group(array (
 			'append' => '',
 			'maxlength' => '',
 		),
+		array (
+			'key' => 'field_shuef27googlean8b4f',
+			'label' => 'Google Analytics',
+			'name' => 'googleanalytics',
+			'type' => 'text',
+			'instructions' => 'Google Analitics Tracking ID',
+			'required' => 0,
+			'conditional_logic' => 0,
+			'wrapper' => array (
+				'width' => '',
+				'class' => '',
+				'id' => '',
+			),
+			'default_value' => '',
+			'placeholder' => '000000000-1',
+			'prepend' => 'UA-',
+			'append' => '',
+			'maxlength' => '',
+		),
 	),
 	'location' => array (
 		array (
@@ -161,8 +180,6 @@ foreach ($typesdata as $item) {
 		),
 	);
 }
-
-// print '<pre>'; print_r($types); print '</pre>';
 
 // Add Seo Fields to Post/Page/Custom Edit Screen
 if( function_exists('acf_add_local_field_group') ):
@@ -447,3 +464,19 @@ function squarecandy_acf_seo_hook_header() {
 	<?php
 }
 add_action('wp_head','squarecandy_acf_seo_hook_header');
+
+// add google analtyics to the footer
+function squarecandy_googleanatlyics_footer() {
+	echo '<!-- squarecandy_acf_seo googleanalytics -->';
+	if (
+		WP_DEBUG !== true &&
+		substr($_SERVER['SERVER_NAME'],0,3) != 'dev' &&
+		function_exists('get_field') &&
+		get_field('googleanalytics', 'options')
+	) {
+		echo "<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');";
+		echo "ga('create', 'UA-" . get_field('googleanalytics', 'options') . "', 'auto');ga('send', 'pageview');</script>";
+	}
+
+}
+add_action( 'wp_footer', 'squarecandy_googleanatlyics_footer', 9999 );
