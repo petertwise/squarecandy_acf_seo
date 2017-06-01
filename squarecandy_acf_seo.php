@@ -467,15 +467,25 @@ add_action('wp_head','squarecandy_acf_seo_hook_header');
 
 // add google analtyics to the footer
 function squarecandy_googleanatlyics_footer() {
-	echo '<!-- squarecandy_acf_seo googleanalytics -->';
+
 	if (
 		WP_DEBUG !== true &&
 		substr($_SERVER['SERVER_NAME'],0,3) != 'dev' &&
 		function_exists('get_field') &&
 		get_field('googleanalytics', 'options')
 	) {
-		echo "<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');";
+		echo "<!-- squarecandy_acf_seo googleanalytics -->
+		<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');";
 		echo "ga('create', 'UA-" . get_field('googleanalytics', 'options') . "', 'auto');ga('send', 'pageview');</script>";
+	}
+	elseif (
+		function_exists('get_field') &&
+		!get_field('googleanalytics', 'options')
+	) {
+		echo "<!-- OOPS - enter your google analytics UA account number on the settings page --- squarecandy_acf_seo googleanalytics -->";
+	}
+	else {
+		echo '<!-- squarecandy_acf_seo googleanalytics will go here on the live site. -->';
 	}
 
 }
