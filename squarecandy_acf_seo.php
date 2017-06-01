@@ -186,7 +186,12 @@ function squarecandy_acf_seo_init() {
 	// Add Seo Fields to Post/Page/Custom Edit Screen
 	if( function_exists('acf_add_local_field_group') && is_admin() ):
 
-	$message = squarecandy_acf_seo_google_preview_html();
+	if ( is_admin() && empty($_GET['post']) ) {
+		$message = __('publish / update to view the preview', 'acf');
+	}
+	else {
+		$message = squarecandy_acf_seo_google_preview_html();
+	}
 
 	acf_add_local_field_group(array (
 		'key' => 'group_59147c153ee90',
@@ -469,7 +474,7 @@ function squarecandy_acf_seo_google_preview_html() {
 	$preview .= '<div class="rc"><h3 class="r"><a href="javascript:;">' . $data['head_title'] . '</a></h3>
 	<div class="s"><div class="f" style="white-space:nowrap"><cite>' . $url . '</cite></div>
 	<span class="st">' . $data['description'] . '</span></div>
-	</div></div>';
+	</div>';
 
 	return $preview;
 }
