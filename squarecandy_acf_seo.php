@@ -342,8 +342,11 @@ add_action( 'plugins_loaded', 'squarecandy_acf_seo_image_sizes' );
 function squarecandy_acf_seo_get_data() {
 	global $post;
 	// $post = $wp_query->post;
-	if ( empty($post) ) {
+	if ( empty($post) && isset($_GET['post']) ) {
 		$post = get_post($_GET['post']);
+	}
+	if ( empty($post) ) {
+		return false;
 	}
 	setup_postdata( $post );
 
@@ -458,6 +461,8 @@ function squarecandy_acf_seo_get_data() {
 		}
 	}
 
+	wp_reset_postdata();
+
 	// return the array
 	return $return;
 }
@@ -485,7 +490,18 @@ function squarecandy_acf_seo_hook_header() {
 
 	// global $post;
 	global $wp_query;
-	$post = $wp_query->post;
+	if ( isset($wp_query->post) ) {
+		$post = $wp_query->post;
+	}
+	elseif ( isset($_GET['post']) ) {
+		$post = get_post($_GET['post']);
+	}
+	else {
+		return false;
+	}
+
+	setup_postdata( $post );
+
 	$data = squarecandy_acf_seo_get_data($post->ID);
 
 	// output the code
@@ -525,6 +541,7 @@ function squarecandy_acf_seo_hook_header() {
 	<?php endif; ?>
 
 	<?php
+	wp_reset_postdata();
 }
 add_action('wp_head','squarecandy_acf_seo_hook_header');
 
