@@ -3,7 +3,7 @@
 Plugin Name: Square Candy ACF SEO Plugin
 Plugin URI:  http://squarecandydesign.com
 Description: provides basic SEO meta fields, defaults and per post overrides
-Version:     20170511
+Version:     v1.1.0
 Author:      Square Candy Design
 Author URI:  http://squarecandydesign.com
 License:     GPL3
