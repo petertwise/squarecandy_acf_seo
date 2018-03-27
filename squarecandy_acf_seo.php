@@ -306,6 +306,13 @@ function squarecandy_acf_seo_init() {
 				'new_lines' => '',
 				'esc_html' => 0,
 			),
+			array (
+				'key' => 'field_canonical75483997034290',
+				'label' => 'Canonical URL',
+				'name' => 'canonical_url',
+				'type' => 'url',
+				'instructions' => 'Enter the canonical URL if appropriate. This is the "primary location" of the content. <a href="https://moz.com/learn/seo/canonicalization">More infomation</a>. Leave this blank in most cases.',
+			),
 		),
 		'location' => $types,
 		'menu_order' => 0,
@@ -461,11 +468,22 @@ function squarecandy_acf_seo_get_data() {
 		}
 	}
 
+	// if the canonical url is set add it to the array
+	if ( function_exists('get_field') && get_field('canonical_url') ) {
+		$return['canonical'] = get_field('canonical_url');
+
+	}
+
 	wp_reset_postdata();
 
 	// return the array
 	return $return;
 }
+
+// remove the default canonical and shorlink from <head> - we want to use only our overrides.
+remove_action('wp_head', 'rel_canonical');
+remove_action('wp_head', 'wp_shortlink_wp_head');
+
 
 
 function squarecandy_acf_seo_google_preview_html() {
@@ -538,6 +556,11 @@ function squarecandy_acf_seo_hook_header() {
 		<meta property="og:image" content="<?php echo $data['facebookimage']; ?>" />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="627" />
+	<?php endif; ?>
+
+	<?php if ( $data['canonical'] ) : ?>
+		<!-- Canonical URL (points to primary source) -->
+		<link rel="canonical" href="<?php echo $data['canonical']; ?>" />
 	<?php endif; ?>
 
 	<?php
