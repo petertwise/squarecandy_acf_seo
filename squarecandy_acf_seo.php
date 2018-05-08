@@ -442,6 +442,8 @@ function squarecandy_acf_seo_get_data() {
 	// else don't display any of the image meta tags
 	else {
 		$image = false;
+		$return['facebookimage'] = false;
+		$return['twitterimage'] = false;
 	}
 
 	// set the twitter card type
@@ -471,7 +473,9 @@ function squarecandy_acf_seo_get_data() {
 	// if the canonical url is set add it to the array
 	if ( function_exists('get_field') && get_field('canonical_url') ) {
 		$return['canonical'] = get_field('canonical_url');
-
+	}
+	else {
+		$return['canonical'] = false;
 	}
 
 	wp_reset_postdata();
